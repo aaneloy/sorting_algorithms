@@ -1,0 +1,67 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #1e1e1e;
+    color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Title Styling */
+header h1 {
+    font-size: 3em;
+    color: #ffde59;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Algorithm Selection */
+.algorithm-selection {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.algorithm-button {
+    background-color: #4CAF50;
+    color: #fff;
+    font-size: 1.2em;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.algorithm-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    background-color: #3e8e41;
+}
+
+/* Background Animations */
+.left-animation, .right-animation {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.left-animation {
+    left: 0;
+}
+
+.right-animation {
+    right: 0;
+}

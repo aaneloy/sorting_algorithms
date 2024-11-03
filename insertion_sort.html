@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Insertion Sort Presentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <style>
+        /* General Styling */
+        body, .reveal {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            font-size: 1.2em;
+        }
+
+        /* Main Container styling for row layout */
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 0;
+            width: 98%;
+            margin: 0;
+        }
+
+        /* Explanation Step Styling */
+        .explanation-step {
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            line-height: 1.6em;
+        }
+        .step-title {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Bar Chart Container Styling */
+        .bar-chart-container {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #E6F2FF;
+        }
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+        .bar {
+            background-color: #87CEEB;
+            color: white;
+            width: 40px;
+            text-align: center;
+            font-size: 1.5em;
+            border-radius: 5px 5px 0 0;
+            transition: transform 0.3s;
+            position: relative;
+            cursor: pointer;
+        }
+        .bar:hover {
+            background-color: #4682B4;
+        }
+
+        /* Code Container Styling */
+        .code-container {
+            width: 50%;
+            background-color: #f9f9f9;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #333;
+            overflow: auto;
+            height: 300px;
+        }
+        .highlight-code {
+            background-color: #ffffcc;
+        }
+        .code-line:hover {
+            background-color: #d3d3d3;
+        }
+
+        /* Activity Log Container */
+        .activity-log-container {
+            width: 35%;
+            padding: 10px;
+            background-color: #F5F5F5;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.9em;
+        }
+        .activity-log div {
+            margin-bottom: 8px;
+        }
+
+        /* Navigation Button Styling */
+        #buttonContainer {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        #prevButton, #nextButton, #resetButton {
+            padding: 12px 25px;
+            font-size: 1.1em;
+            background-color: #98BF64;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #prevButton:hover, #nextButton:hover, #resetButton:hover {
+            background-color: #6B8E23;
+        }
+        #prevButton:disabled, #nextButton:disabled, #resetButton:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Home Button Styling */
+        .home-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #FFA07A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .home-button:hover {
+            background-color: #FF6347;
+        }
+    </style>
+</head>
+<body>
+
+<div class="reveal">
+    <div class="slides">
+
+        <!-- Slide 1: What is Insertion Sort? -->
+        <section>
+            <h2>What is Insertion Sort?</h2>
+            <div class="explanation-step">
+                <p>Insertion Sort builds a sorted array one element at a time by shifting larger elements to the right and inserting each new element into its correct position within the sorted section.</p>
+            </div>
+        </section>
+
+        <!-- Slide 2: Steps -->
+        <section>
+            <h2>Steps in Insertion Sort</h2>
+            <div class="explanation-step">
+                <span class="step-title">Step-by-Step Process:</span>
+                <ol class="steps-list">
+                    <li>Initialize the sorted part with the first element.</li>
+                    <li>Take each new element from the unsorted part and insert it in the correct position in the sorted part by shifting larger elements to the right.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Slide 3: Complexity Analysis -->
+        <section>
+            <h2>Complexity</h2>
+            <div class="explanation-step">
+                <p>Worst Case: O(n²) - when the array is sorted in reverse.</p>
+                <p>Best Case: O(n) - when the array is already sorted.</p>
+                <p>Space Complexity: O(1) - it requires constant space.</p>
+            </div>
+        </section>
+
+        <!-- Slide 4: Visualization -->
+        <section>
+            <h2>Insertion Sort Visualization</h2>
+            <div class="container">
+                <!-- Bar Chart Container -->
+                <div class="bar-chart-container">
+                    <div id="barChart" class="bar-chart"></div>
+                </div>
+
+                <!-- Activity Log Container -->
+                <div class="activity-log-container">
+                    <div id="activityLog" class="activity-log"></div>
+                </div>
+
+                <!-- Code Display Container -->
+                <div class="code-container" id="codeContainer">
+                    <pre>
+<span class="code-line" data-line="1">for (int i = 1; i < n; i++) {</span>
+<span class="code-line" data-line="2">    int key = arr[i];</span>
+<span class="code-line" data-line="3">    int j = i - 1;</span>
+<span class="code-line" data-line="4">    while (j >= 0 && arr[j] > key) {</span>
+<span class="code-line" data-line="5">        arr[j + 1] = arr[j];</span>
+<span class="code-line" data-line="6">        j--;</span>
+<span class="code-line" data-line="7">    }</span>
+<span class="code-line" data-line="8">    arr[j + 1] = key;</span>
+<span class="code-line" data-line="9">}</span>
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div id="buttonContainer">
+                <button id="prevButton" onclick="prevStep()">Previous</button>
+                <button id="nextButton" onclick="nextStep()">Next</button>
+                <button id="resetButton" onclick="resetVisualization()">Reset</button>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<!-- Home Button -->
+<a href="index.html" class="home-button">Home</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+<script>
+    Reveal.initialize({ transition: 'slide' });
+
+    const barChart = document.getElementById("barChart");
+    const codeContainer = document.getElementById("codeContainer");
+    const activityLog = document.getElementById("activityLog");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+    const resetButton = document.getElementById("resetButton");
+
+    let array = [5, 3, 8, 4, 2];
+    const bars = [];
+    let i = 1;
+    let logCounter = 1;
+    const steps = [];
+
+    function initializeBarChart() {
+        barChart.innerHTML = '';
+        bars.length = 0;
+        array.forEach(value => {
+            const bar = document.createElement("div");
+            bar.classList.add("bar");
+            bar.style.height = `${value * 30}px`;
+            bar.textContent = value;
+            bars.push(bar);
+            barChart.appendChild(bar);
+        });
+    }
+
+    function highlightCode(line) {
+        document.querySelectorAll('.highlight-code').forEach(el => el.classList.remove('highlight-code'));
+        document.querySelector(`[data-line="${line}"]`).classList.add("highlight-code");
+    }
+
+    function logActivity(message) {
+        const logEntry = document.createElement("div");
+        logEntry.textContent = `${logCounter}. ${message}`;
+        activityLog.appendChild(logEntry);
+        activityLog.scrollTop = activityLog.scrollHeight;
+        logCounter++;
+    }
+
+    function saveStep() {
+        steps.push({
+            array: [...array],
+            i: i,
+            logCounter: logCounter,
+            logHTML: activityLog.innerHTML
+        });
+    }
+
+    function nextStep() {
+        saveStep();
+
+        if (i >= array.length) {
+            logActivity("Sorting complete!");
+            nextButton.disabled = true;
+            return;
+        }
+
+        highlightCode(2);
+        let key = array[i];
+        let j = i - 1;
+        logActivity(`Picked element ${key} at index ${i} for insertion.`);
+
+        while (j >= 0 && array[j] > key) {
+            highlightCode(5);
+            array[j + 1] = array[j];
+            bars[j + 1].style.height = `${array[j + 1] * 30}px`;
+            bars[j + 1].textContent = array[j + 1];
+            logActivity(`Moved ${array[j]} to index ${j + 1}.`);
+            j--;
+        }
+
+        array[j + 1] = key;
+        bars[j + 1].style.height = `${key * 30}px`;
+        bars[j + 1].textContent = key;
+        logActivity(`Inserted ${key} at index ${j + 1}.`);
+        i++;
+        prevButton.disabled = false;
+    }
+
+    function prevStep() {
+        if (steps.length <= 1) return;
+        steps.pop();
+        const lastStep = steps[steps.length - 1];
+
+        array = [...lastStep.array];
+        i = lastStep.i;
+        logCounter = lastStep.logCounter;
+
+        activityLog.innerHTML = lastStep.logHTML;
+        initializeBarChart();
+
+        nextButton.disabled = false;
+        prevButton.disabled = steps.length <= 1;
+    }
+
+    function resetVisualization() {
+        array = [5, 3, 8, 4, 2];
+        bars.length = 0;
+        i = 1;
+        logCounter = 1;
+        activityLog.innerHTML = '';
+        steps.length = 0;
+        initializeBarChart();
+        prevButton.disabled = true;
+        nextButton.disabled = false;
+        highlightCode(1);
+    }
+
+    initializeBarChart();
+</script>
+
+</body>
+</html>

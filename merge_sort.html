@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge Sort</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <style>
+        body, .reveal {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            font-size: 1.2em;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 10px;
+            width: 98%;
+            margin: 0;
+        }
+        .bar-chart-container {
+            width: 45%;
+            background-color: #E6F2FF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            height: 300px;
+        }
+        .bar {
+            background-color: #87CEEB;
+            color: white;
+            width: 40px;
+            text-align: center;
+            font-size: 1.5em;
+            border-radius: 5px 5px 0 0;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .bar:hover {
+            background-color: #4682B4;
+            transform: scale(1.1);
+        }
+        .code-container, .activity-log-container {
+            width: 45%;
+            background-color: #f9f9f9;
+            font-family: monospace;
+            font-size: 0.9em;
+            overflow: auto;
+            max-height: 300px;
+        }
+        .highlight-code {
+            background-color: #ffffcc;
+        }
+        .activity-log div {
+            margin-bottom: 8px;
+        }
+        #buttonContainer {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding-top: 20px;
+        }
+        #prevButton, #nextButton, #resetButton {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #98BF64;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #prevButton:disabled, #nextButton:disabled, #resetButton:disabled {
+            background-color: #ccc;
+        }
+        .home-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #FFA07A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="reveal">
+    <div class="slides">
+        <!-- Slide 1: What is Merge Sort? -->
+        <section>
+            <h2>What is Merge Sort?</h2>
+            <div>
+                <p>Merge Sort is a divide-and-conquer algorithm that splits the array into halves, recursively sorts them, and merges the sorted halves.</p>
+            </div>
+        </section>
+
+        <!-- Slide 2: Steps of Merge Sort -->
+        <section>
+            <h2>Steps of Merge Sort</h2>
+            <ol>
+                <li>Divide the array into halves until each part has a single element.</li>
+                <li>Recursively sort and merge each half back together to form a sorted array.</li>
+            </ol>
+        </section>
+
+        <!-- Slide 3: Example -->
+        <section>
+            <h2>Merge Sort Example</h2>
+            <p>Array before sorting: [5, 3, 8, 4, 2]</p>
+            <ol>
+                <li>Divide into [5, 3] and [8, 4, 2]</li>
+                <li>Divide further until single elements: [5], [3], [8], [4], [2]</li>
+                <li>Merge back in sorted order to get [2, 3, 4, 5, 8]</li>
+            </ol>
+        </section>
+
+        <!-- Slide 4: Complexity Analysis -->
+        <section>
+            <h2>Time and Space Complexity</h2>
+            <p><strong>Time Complexity:</strong> O(n log n) for all cases</p>
+            <p><strong>Space Complexity:</strong> O(n) for auxiliary array space</p>
+        </section>
+
+        <!-- Slide 5: Pseudo Code -->
+        <section>
+            <h2>Pseudo Code for Merge Sort</h2>
+            <pre>
+Begin
+  if left < right
+    mid = (left + right) / 2
+    mergeSort(arr, left, mid)
+    mergeSort(arr, mid + 1, right)
+    merge(arr, left, mid, right)
+End
+            </pre>
+        </section>
+
+        <!-- Slide 6: Interactive Visualization -->
+        <section>
+            <h2>Merge Sort Visualization</h2>
+            <div class="container">
+                <div class="bar-chart-container">
+                    <div id="barChart" class="bar-chart"></div>
+                </div>
+                <div class="activity-log-container" id="activityLog"></div>
+                <div class="code-container" id="codeContainer">
+                    <pre>
+<span class="code-line" data-line="1">void mergeSort(int arr[], int left, int right) {</span>
+<span class="code-line" data-line="2">    if (left < right) {</span>
+<span class="code-line" data-line="3">        int mid = (left + right) / 2;</span>
+<span class="code-line" data-line="4">        mergeSort(arr, left, mid);</span>
+<span class="code-line" data-line="5">        mergeSort(arr, mid + 1, right);</span>
+<span class="code-line" data-line="6">        merge(arr, left, mid, right);</span>
+<span class="code-line" data-line="7">    }</span>
+<span class="code-line" data-line="8">}</span>
+                    </pre>
+                </div>
+            </div>
+
+            <div id="buttonContainer">
+                <button id="prevButton" onclick="prevStep()">Previous</button>
+                <button id="nextButton" onclick="nextStep()">Next</button>
+                <button id="resetButton" onclick="resetVisualization()">Reset</button>
+            </div>
+        </section>
+    </div>
+</div>
+
+<a href="index.html" class="home-button">Home</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+<script>
+    Reveal.initialize({ transition: 'slide' });
+
+    const barChart = document.getElementById("barChart");
+    const activityLog = document.getElementById("activityLog");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+    const resetButton = document.getElementById("resetButton");
+
+    let array = [5, 3, 8, 4, 2];
+    let steps = [];
+    let currentStep = 0;
+
+    function initializeBarChart() {
+        barChart.innerHTML = '';
+        array.forEach((value) => {
+            const bar = document.createElement("div");
+            bar.classList.add("bar");
+            bar.style.height = `${value * 30}px`;
+            bar.textContent = value;
+            barChart.appendChild(bar);
+        });
+    }
+
+    function highlightCode(line) {
+        document.querySelectorAll('.highlight-code').forEach(el => el.classList.remove('highlight-code'));
+        const codeLine = document.querySelector(`[data-line="${line}"]`);
+        if (codeLine) codeLine.classList.add("highlight-code");
+    }
+
+    function logActivity(message) {
+        const logEntry = document.createElement("div");
+        logEntry.textContent = `${steps.length + 1}. ${message}`;
+        activityLog.appendChild(logEntry);
+        activityLog.scrollTop = activityLog.scrollHeight;
+    }
+
+    function saveStep() {
+        steps.push({
+            array: [...array],
+            logHTML: activityLog.innerHTML,
+            highlightedLine: document.querySelector('.highlight-code')?.getAttribute('data-line') || 0
+        });
+    }
+
+    function mergeSortRecursive(arr, left, right) {
+        if (left < right) {
+            const mid = Math.floor((left + right) / 2);
+            highlightCode(3);
+            mergeSortRecursive(arr, left, mid);
+            highlightCode(5);
+            mergeSortRecursive(arr, mid + 1, right);
+            highlightCode(6);
+            merge(arr, left, mid, right);
+            saveStep();
+            logActivity(`Merging sections from ${left} to ${right}`);
+        }
+    }
+
+    function merge(arr, left, mid, right) {
+        let leftArr = arr.slice(left, mid + 1);
+        let rightArr = arr.slice(mid + 1, right + 1);
+        let i = 0, j = 0, k = left;
+
+        while (i < leftArr.length && j < rightArr.length) {
+            arr[k++] = leftArr[i] <= rightArr[j] ? leftArr[i++] : rightArr[j++];
+        }
+
+        while (i < leftArr.length) arr[k++] = leftArr[i++];
+        while (j < rightArr.length) arr[k++] = rightArr[j++];
+    }
+
+    function nextStep() {
+        if (currentStep >= steps.length) {
+            logActivity("Merge Sort complete.");
+            nextButton.disabled = true;
+            return;
+        }
+
+        const step = steps[currentStep];
+        array = [...step.array];
+        initializeBarChart();
+        activityLog.innerHTML = step.logHTML;
+        highlightCode(step.highlightedLine);
+        currentStep++;
+        prevButton.disabled = false;
+    }
+
+    function prevStep() {
+        if (currentStep <= 0) return;
+        currentStep--;
+        const step = steps[currentStep];
+        array = [...step.array];
+        initializeBarChart();
+        activityLog.innerHTML = step.logHTML;
+        highlightCode(step.highlightedLine);
+        nextButton.disabled = false;
+        prevButton.disabled = currentStep <= 0;
+    }
+
+    function resetVisualization() {
+        array = [5, 3, 8, 4, 2];
+        steps = [];
+        currentStep = 0;
+        activityLog.innerHTML = '';
+        saveStep();
+        initializeBarChart();
+        prevButton.disabled = true;
+        nextButton.disabled = false;
+        highlightCode(1);
+        mergeSortRecursive(array, 0, array.length - 1);
+    }
+
+    resetVisualization();
+</script>
+
+</body>
+</html>

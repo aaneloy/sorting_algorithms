@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Sort Visualization</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <style>
+        body, .reveal {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            font-size: 1.2em;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .bar-chart-container {
+            width: 45%;
+            display: flex;
+            align-items: center;
+            background-color: #E6F2FF;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+            width: 100%;
+            height: 300px;
+        }
+
+        .bar {
+            background-color: #87CEEB;
+            color: white;
+            width: 40px;
+            text-align: center;
+            font-size: 1.5em;
+            border-radius: 5px 5px 0 0;
+            transition: transform 0.3s;
+        }
+
+        .bar:hover {
+            background-color: #5DADE2;
+            transform: scale(1.1);
+        }
+
+        .code-container, .activity-log-container {
+            width: 25%;
+            padding: 10px;
+            background-color: #f9f9f9;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #333;
+            overflow: auto;
+            height: 300px;
+        }
+
+        .highlight-code {
+            background-color: #ffffcc;
+        }
+
+        .activity-log div {
+            margin-bottom: 8px;
+        }
+
+        #buttonContainer {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding-top: 20px;
+        }
+
+        #prevButton, #nextButton, #resetButton {
+            padding: 12px 25px;
+            font-size: 1.1em;
+            background-color: #98BF64;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #prevButton:hover, #nextButton:hover, #resetButton:hover {
+            background-color: #6B8E23;
+        }
+
+        .home-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #FFA07A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="reveal">
+    <div class="slides">
+        <!-- Slide 1: What is Quick Sort? -->
+        <section>
+            <h2>What is Quick Sort?</h2>
+            <p>Quick Sort is an efficient sorting algorithm based on partitioning of an array of data into smaller arrays.</p>
+        </section>
+
+        <!-- Slide 2: Quick Sort Steps -->
+        <section>
+            <h2>Quick Sort Steps</h2>
+            <ol>
+                <li>Pick an element as pivot.</li>
+                <li>Partition the array around the pivot.</li>
+                <li>Recursively sort the partitions.</li>
+            </ol>
+        </section>
+
+        <!-- Slide 3: Time Complexity -->
+        <section>
+            <h2>Time and Space Complexity</h2>
+            <p><strong>Average Case:</strong> O(n log n)</p>
+            <p><strong>Worst Case:</strong> O(n²) when the pivot is always the smallest or largest element.</p>
+            <p><strong>Space Complexity:</strong> O(log n) for the recursion stack.</p>
+        </section>
+
+        <!-- Slide 4: Pseudo Code -->
+        <section>
+            <h2>Pseudo Code for Quick Sort</h2>
+            <pre>
+void quickSort(arr[], low, high)
+{
+   if (low < high)
+   {
+       int pi = partition(arr, low, high);
+       quickSort(arr, low, pi - 1);
+       quickSort(arr, pi + 1, high);
+   }
+}
+            </pre>
+        </section>
+        <!-- Slide 5: Interactive Visualization -->
+        <section>
+            <h2>Quick Sort Visualization</h2>
+            <div class="container">
+                <div class="bar-chart-container">
+                    <div id="barChart" class="bar-chart"></div>
+                </div>
+                <div class="activity-log-container" id="activityLog"></div>
+                <div class="code-container" id="codeContainer">
+                    <pre>
+<span class="code-line" data-line="1">void quickSort(int arr[], int low, int high) {</span>
+<span class="code-line" data-line="2">    if (low < high) {</span>
+<span class="code-line" data-line="3">        int pi = partition(arr, low, high);</span>
+<span class="code-line" data-line="4">        quickSort(arr, low, pi - 1);</span>
+<span class="code-line" data-line="5">        quickSort(arr, pi + 1, high);</span>
+<span class="code-line" data-line="6">    }</span>
+<span class="code-line" data-line="7">}</span>
+                    </pre>
+                </div>
+            </div>
+
+            <div id="buttonContainer">
+                <button id="prevButton">Previous</button>
+                <button id="nextButton">Next</button>
+                <button id="resetButton">Reset</button>
+            </div>
+        </section>
+    </div>
+</div>
+
+<a href="index.html" class="home-button">Home</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+<script>
+    Reveal.initialize({ transition: 'slide' });
+
+    const barChart = document.getElementById("barChart");
+    const activityLog = document.getElementById("activityLog");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+    const resetButton = document.getElementById("resetButton");
+
+    let array = [5, 3, 8, 4, 2];
+    let steps = [];
+    let currentStep = 0;
+
+    function initializeBarChart() {
+        barChart.innerHTML = '';
+        array.forEach((value) => {
+            const bar = document.createElement("div");
+            bar.classList.add("bar");
+            bar.style.height = `${value * 30}px`;
+            bar.textContent = value;
+            barChart.appendChild(bar);
+        });
+    }
+
+    function highlightCode(line) {
+        document.querySelectorAll('.highlight-code').forEach(el => el.classList.remove('highlight-code'));
+        document.querySelector(`[data-line="${line}"]`).classList.add("highlight-code");
+    }
+
+    function logActivity(message) {
+        const logEntry = document.createElement("div");
+        logEntry.textContent = `${steps.length + 1}. ${message}`;
+        activityLog.appendChild(logEntry);
+        activityLog.scrollTop = activityLog.scrollHeight;
+    }
+
+    function saveStep(lineToHighlight) {
+        steps.push({
+            array: [...array],
+            logHTML: activityLog.innerHTML,
+            highlightedLine: lineToHighlight
+        });
+    }
+
+    function partition(arr, low, high) {
+        let pivot = arr[high];
+        let i = low - 1;
+        for (let j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        }
+        [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+        return i + 1;
+    }
+
+    function quickSort(arr, low, high) {
+        if (low < high) {
+            const pi = partition(arr, low, high);
+            saveStep(3);
+            logActivity(`Partition at index ${pi}, pivot ${arr[pi]}`);
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    }
+
+    function nextStep() {
+        if (currentStep >= steps.length) {
+            logActivity("Quick Sort complete.");
+            nextButton.disabled = true;
+            return;
+        }
+
+        const step = steps[currentStep];
+        array = [...step.array];
+        initializeBarChart();
+        activityLog.innerHTML = step.logHTML;
+        highlightCode(step.highlightedLine);
+        currentStep++;
+        prevButton.disabled = false;
+    }
+
+    function prevStep() {
+        if (currentStep <= 0) return;
+        currentStep--;
+        const step = steps[currentStep];
+        array = [...step.array];
+        initializeBarChart();
+        activityLog.innerHTML = step.logHTML;
+        highlightCode(step.highlightedLine);
+        nextButton.disabled = false;
+        prevButton.disabled = currentStep <= 0;
+    }
+
+    function resetVisualization() {
+        array = [5, 3, 8, 4, 2];
+        steps = [];
+        currentStep = 0;
+        activityLog.innerHTML = '';
+        saveStep(1);
+        initializeBarChart();
+        prevButton.disabled = true;
+        nextButton.disabled = false;
+        quickSort(array, 0, array.length - 1);
+    }
+
+    resetButton.onclick = resetVisualization;
+    nextButton.onclick = nextStep;
+    prevButton.onclick = prevStep;
+
+    resetVisualization();
+</script>
+
+</body>
+</html>

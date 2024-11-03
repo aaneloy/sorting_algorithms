@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Sorting Algorithm Visualizer</title>
+    <style>
+        /* General Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Neural Network Background */
+        .neural-network-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            opacity: 0.07;
+            transform: translate(-50%, -50%) scale(1);
+            animation: floatNetwork 25s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes floatNetwork {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -55%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Neural Network Circles */
+        .neural-network-background .circle {
+            position: absolute;
+            background-color: #333;
+            border-radius: 50%;
+        }
+
+        /* Neural Network Lines */
+        .neural-network-background .line {
+            position: absolute;
+            background-color: #333;
+            opacity: 0.2;
+        }
+
+        /* Circles and Lines Configuration */
+        .circle1 { width: 15px; height: 15px; top: 10%; left: 10%; }
+        .circle2 { width: 20px; height: 20px; top: 40%; left: 25%; }
+        .circle3 { width: 10px; height: 10px; top: 70%; left: 50%; }
+        .circle4 { width: 15px; height: 15px; top: 25%; left: 75%; }
+        .circle5 { width: 18px; height: 18px; top: 80%; left: 80%; }
+
+        .line1 { width: 1px; height: 200px; top: 12%; left: 12%; transform: rotate(45deg); }
+        .line2 { width: 1px; height: 150px; top: 42%; left: 27%; transform: rotate(-30deg); }
+        .line3 { width: 1px; height: 180px; top: 70%; left: 52%; transform: rotate(60deg); }
+        .line4 { width: 1px; height: 160px; top: 30%; left: 75%; transform: rotate(15deg); }
+
+        /* Title Styling */
+        header h1 {
+            font-size: 3em;
+            color: #3a3a3a;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Algorithm Selection */
+        .algorithm-selection {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Suggested Button Color - Taupe (#d4bfb1) */
+        .algorithm-button {
+            background-color: #d4bfb1;
+            color: #fff;
+            font-size: 1.2em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .algorithm-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            background-color: #b59a8d; /* Slightly darker taupe on hover */
+        }
+
+        /* Background Animations */
+        .left-animation, .right-animation {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .left-animation {
+            left: 0;
+        }
+
+        .right-animation {
+            right: 0;
+        }
+
+        /* Footer Styling */
+        footer {
+            position: absolute;
+            bottom: 10px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+            width: 100%;
+        }
+
+        footer a {
+            color: #98BF64;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Neural Network Background -->
+    <div class="neural-network-background">
+        <div class="circle circle1"></div>
+        <div class="circle circle2"></div>
+        <div class="circle circle3"></div>
+        <div class="circle circle4"></div>
+        <div class="circle circle5"></div>
+
+        <div class="line line1"></div>
+        <div class="line line2"></div>
+        <div class="line line3"></div>
+        <div class="line line4"></div>
+    </div>
+
+    <!-- Background Animations -->
+    <div class="left-animation">
+        <canvas id="leftCanvas" width="300" height="500"></canvas>
+    </div>
+    <div class="right-animation">
+        <canvas id="rightCanvas" width="300" height="500"></canvas>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <header>
+            <h1>Sorting Algorithm Visualizer</h1>
+        </header>
+        <section class="algorithm-selection">
+            <a href="bubble_sort.html" class="algorithm-button">Bubble Sort</a>
+            <a href="selection_sort.html" class="algorithm-button">Selection Sort</a>
+            <a href="insertion_sort.html" class="algorithm-button">Insertion Sort</a>
+            <a href="merge_sort.html" class="algorithm-button">Merge Sort</a>
+            <a href="quick_sort.html" class="algorithm-button">Quick Sort</a>
+        </section>
+    </div>
+
+    <footer>
+        <p>Created by Asif Ahmed Neloy | <a href="https://aaniloy.github.io/" target="_blank">Visit My Website</a></p>
+    </footer>
+
+    <!-- JavaScript for Continuous Sorting Animations -->
+    <script>
+        // Left Canvas - Bubble Sort Preview
+        const leftCanvas = document.getElementById('leftCanvas');
+        const leftCtx = leftCanvas.getContext('2d');
+        let leftArray = Array.from({ length: 30 }, () => Math.floor(Math.random() * leftCanvas.height));
+
+        function drawLeftArray() {
+            leftCtx.clearRect(0, 0, leftCanvas.width, leftCanvas.height);
+            const barWidth = leftCanvas.width / leftArray.length;
+            leftArray.forEach((value, index) => {
+                leftCtx.fillStyle = "#ff6b6b";
+                leftCtx.fillRect(index * barWidth, leftCanvas.height - value, barWidth, value);
+            });
+        }
+
+        async function bubbleSortLeft() {
+            for (let i = 0; i < leftArray.length - 1; i++) {
+                for (let j = 0; j < leftArray.length - i - 1; j++) {
+                    if (leftArray[j] > leftArray[j + 1]) {
+                        [leftArray[j], leftArray[j + 1]] = [leftArray[j + 1], leftArray[j]];
+                        drawLeftArray();
+                        await new Promise(resolve => setTimeout(resolve, 30));
+                    }
+                }
+            }
+            leftArray = Array.from({ length: 30 }, () => Math.floor(Math.random() * leftCanvas.height));
+            bubbleSortLeft();
+        }
+
+        drawLeftArray();
+        bubbleSortLeft();
+
+        // Right Canvas - Quick Sort Preview
+        const rightCanvas = document.getElementById('rightCanvas');
+        const rightCtx = rightCanvas.getContext('2d');
+        let rightArray = Array.from({ length: 30 }, () => Math.floor(Math.random() * rightCanvas.height));
+
+        function drawRightArray() {
+            rightCtx.clearRect(0, 0, rightCanvas.width, rightCanvas.height);
+            const barWidth = rightCanvas.width / rightArray.length;
+            rightArray.forEach((value, index) => {
+                rightCtx.fillStyle = "#98BF64"; // Olive green color
+                rightCtx.fillRect(index * barWidth, rightCanvas.height - value, barWidth, value);
+            });
+        }
+
+        async function quickSortRight(arr, start = 0, end = arr.length - 1) {
+            if (start >= end) return;
+
+            const pivotIndex = await partition(arr, start, end);
+            drawRightArray();
+            await Promise.all([
+                quickSortRight(arr, start, pivotIndex - 1),
+                quickSortRight(arr, pivotIndex + 1, end)
+            ]);
+        }
+
+        async function partition(arr, start, end) {
+            const pivotValue = arr[end];
+            let pivotIndex = start;
+            for (let i = start; i < end; i++) {
+                if (arr[i] < pivotValue) {
+                    [arr[i], arr[pivotIndex]] = [arr[pivotIndex], arr[i]];
+                    pivotIndex++;
+                    drawRightArray();
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+            }
+            [arr[pivotIndex], arr[end]] = [arr[end], arr[pivotIndex]];
+            drawRightArray();
+            return pivotIndex;
+        }
+
+        async function loopQuickSortRight() {
+            await quickSortRight(rightArray, 0, rightArray.length - 1);
+            rightArray = Array.from({ length: 30 }, () => Math.floor(Math.random() * rightCanvas.height));
+            loopQuickSortRight();
+        }
+
+        drawRightArray();
+        loopQuickSortRight();
+    </script>
+</body>
+</html>
